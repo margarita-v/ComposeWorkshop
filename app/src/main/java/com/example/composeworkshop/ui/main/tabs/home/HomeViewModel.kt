@@ -3,6 +3,7 @@ package com.example.composeworkshop.ui.main.tabs.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composeworkshop.LoadState
+import com.example.composeworkshop.R
 import com.example.composeworkshop.core.request.Request
 import com.example.composeworkshop.core.request.requestFlow
 import com.example.composeworkshop.domain.ProductsCategoryEntity
@@ -26,6 +27,9 @@ class HomeViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()
 
+    private val _alertMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val alertMessage: StateFlow<Int?> get() = _alertMessage.asStateFlow()
+
     private val _categories = MutableStateFlow(emptyList<ProductsCategoryEntity>())
     val categories: StateFlow<List<ProductsCategoryEntity>> get() = _categories.asStateFlow()
 
@@ -48,12 +52,14 @@ class HomeViewModel @Inject constructor(
             }.collect { requestState ->
                 when (requestState) {
                     is Request.Loading<*> -> {
+                        _alertMessage.value = null
                         _isRefreshing.value = refresh
                         if (!refresh) {
                             _loadState.value = LoadState.Loading
                         }
                     }
                     is Request.Success<*> -> {
+                        _alertMessage.value = null
                         _isRefreshing.value = false
                         _categories.value = requestState.data as List<ProductsCategoryEntity>
                         _loadState.value = LoadState.Succeed
@@ -61,7 +67,10 @@ class HomeViewModel @Inject constructor(
                     is Request.Error<*> -> {
                         _isRefreshing.value = false
                         if (!refresh) {
+                            _alertMessage.value = null
                             _loadState.value = LoadState.Error
+                        } else {
+                            _alertMessage.value = R.string.error_retry_ptr
                         }
                     }
                 }

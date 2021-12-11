@@ -10,4 +10,5 @@
     <string name="error_title">Data loading error</string>
     <string name="error_message">Check internet connection and try again</string>
     <string name="error_retry">Retry</string>
+    <string name="error_retry_ptr">Data reload error, try again later</string>
 </resources>

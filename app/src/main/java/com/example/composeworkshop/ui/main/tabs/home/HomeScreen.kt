@@ -16,6 +16,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {
         val loadState: LoadState by viewModel.loadState.collectAsState()
         val isRefreshing: Boolean by viewModel.isRefreshing.collectAsState()
+        val alertMessage: Int? by viewModel.alertMessage.collectAsState()
         val categories: List<ProductsCategoryEntity> by viewModel.categories.collectAsState()
 
         Search()
@@ -23,7 +24,11 @@ fun HomeScreen(viewModel: HomeViewModel) {
         when (loadState) {
             LoadState.Loading -> MainLoading()
             LoadState.Error -> Error { viewModel.loadFeed() }
-            LoadState.Succeed -> Success(categories, isRefreshing) { viewModel.refresh() }
+            LoadState.Succeed -> Success(
+                categories,
+                isRefreshing,
+                alertMessage,
+            ) { viewModel.refresh() }
         }
     }
 }
