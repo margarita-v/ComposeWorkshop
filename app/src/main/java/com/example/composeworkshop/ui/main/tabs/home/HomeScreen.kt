@@ -15,6 +15,7 @@ import com.example.composeworkshop.domain.ProductsCategoryEntity
 fun HomeScreen(viewModel: HomeViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {
         val loadState: LoadState by viewModel.loadState.collectAsState()
+        val isRefreshing: Boolean by viewModel.isRefreshing.collectAsState()
         val categories: List<ProductsCategoryEntity> by viewModel.categories.collectAsState()
 
         Search()
@@ -22,7 +23,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
         when (loadState) {
             LoadState.Loading -> MainLoading()
             LoadState.Error -> Error { viewModel.loadFeed() }
-            LoadState.Succeed -> Success(categories)
+            LoadState.Succeed -> Success(categories, isRefreshing) { viewModel.refresh() }
         }
     }
 }

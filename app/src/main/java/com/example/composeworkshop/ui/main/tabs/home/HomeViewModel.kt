@@ -23,6 +23,9 @@ class HomeViewModel @Inject constructor(
     private val _loadState = MutableStateFlow(LoadState.Loading)
     val loadState: StateFlow<LoadState> get() = _loadState.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()
+
     private val _categories = MutableStateFlow(emptyList<ProductsCategoryEntity>())
     val categories: StateFlow<List<ProductsCategoryEntity>> get() = _categories.asStateFlow()
 
@@ -30,21 +33,36 @@ class HomeViewModel @Inject constructor(
         loadFeed()
     }
 
+    fun refresh() {
+        loadFeedInternal(true)
+    }
+
     fun loadFeed() {
+        loadFeedInternal(false)
+    }
+
+    private fun loadFeedInternal(refresh: Boolean) {
         viewModelScope.launch {
             requestFlow {
                 feedInteractor.getCategories()
             }.collect { requestState ->
                 when (requestState) {
                     is Request.Loading<*> -> {
-                        _loadState.value = LoadState.Loading
+                        _isRefreshing.value = refresh
+                        if (!refresh) {
+                            _loadState.value = LoadState.Loading
+                        }
                     }
                     is Request.Success<*> -> {
+                        _isRefreshing.value = false
                         _categories.value = requestState.data as List<ProductsCategoryEntity>
                         _loadState.value = LoadState.Succeed
                     }
                     is Request.Error<*> -> {
-                        _loadState.value = LoadState.Error
+                        _isRefreshing.value = false
+                        if (!refresh) {
+                            _loadState.value = LoadState.Error
+                        }
                     }
                 }
             }
