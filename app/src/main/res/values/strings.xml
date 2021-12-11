@@ -5,4 +5,5 @@
     <string name="bottom_bar_shopping_cart">Cart</string>
     <string name="bottom_bar_shops">Shops</string>
     <string name="bottom_bar_profile">Profile</string>
+    <string name="search_title">Search</string>
 </resources>
