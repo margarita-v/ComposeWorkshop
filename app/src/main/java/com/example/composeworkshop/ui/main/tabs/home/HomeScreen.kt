@@ -7,18 +7,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.example.composeworkshop.LoadState
+import com.example.composeworkshop.domain.ProductsCategoryEntity
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {
         val loadState: LoadState by viewModel.loadState.collectAsState()
+        val categories: List<ProductsCategoryEntity> by viewModel.categories.collectAsState()
 
         Search()
 
         when (loadState) {
             LoadState.Loading -> MainLoading()
-            LoadState.Error -> TODO()
-            LoadState.Succeed -> TODO()
+            LoadState.Error -> Error { viewModel.loadFeed() }
+            LoadState.Succeed -> Success(categories)
         }
     }
 }

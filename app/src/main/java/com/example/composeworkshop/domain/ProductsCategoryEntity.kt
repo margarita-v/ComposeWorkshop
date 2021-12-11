@@ -4,5 +4,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class ProductsCategoryEntity(
-    val name: String
+    val name: String,
+    val shortName: String,
+    val icon: String
 )

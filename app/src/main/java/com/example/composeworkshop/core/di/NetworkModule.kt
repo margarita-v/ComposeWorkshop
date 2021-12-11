@@ -33,11 +33,7 @@ class NetworkModule {
                 HttpLoggingInterceptor { message ->
                     Log.d("OkHttp", message)
                 }.apply {
-                    level = if (BuildConfig.DEBUG) {
-                        HttpLoggingInterceptor.Level.BODY
-                    } else {
-                        HttpLoggingInterceptor.Level.BASIC
-                    }
+                    level = HttpLoggingInterceptor.Level.BODY
                 }
             )
             .build()

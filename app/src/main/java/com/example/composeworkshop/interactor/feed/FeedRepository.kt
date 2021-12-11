@@ -8,6 +8,6 @@ class FeedRepository(private val api: FeedApi) {
 
     suspend fun getCategories(): List<ProductsCategoryEntity> =
         withContext(Dispatchers.IO) {
-            api.getCategories().map { it.transform() }
+            api.getCategories().transform()
         }
 }

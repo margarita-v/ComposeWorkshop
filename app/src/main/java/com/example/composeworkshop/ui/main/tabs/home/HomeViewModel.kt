@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.composeworkshop.LoadState
 import com.example.composeworkshop.core.request.Request
 import com.example.composeworkshop.core.request.requestFlow
+import com.example.composeworkshop.domain.ProductsCategoryEntity
 import com.example.composeworkshop.interactor.feed.FeedInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,19 +23,29 @@ class HomeViewModel @Inject constructor(
     private val _loadState = MutableStateFlow(LoadState.Loading)
     val loadState: StateFlow<LoadState> get() = _loadState.asStateFlow()
 
+    private val _categories = MutableStateFlow(emptyList<ProductsCategoryEntity>())
+    val categories: StateFlow<List<ProductsCategoryEntity>> get() = _categories.asStateFlow()
+
     init {
         loadFeed()
     }
 
-    private fun loadFeed() {
+    fun loadFeed() {
         viewModelScope.launch {
             requestFlow {
                 feedInteractor.getCategories()
             }.collect { requestState ->
-                _loadState.value = when (requestState) {
-                    is Request.Loading<*> -> LoadState.Loading
-                    is Request.Success<*> -> LoadState.Succeed
-                    is Request.Error<*> -> LoadState.Error
+                when (requestState) {
+                    is Request.Loading<*> -> {
+                        _loadState.value = LoadState.Loading
+                    }
+                    is Request.Success<*> -> {
+                        _categories.value = requestState.data as List<ProductsCategoryEntity>
+                        _loadState.value = LoadState.Succeed
+                    }
+                    is Request.Error<*> -> {
+                        _loadState.value = LoadState.Error
+                    }
                 }
             }
         }
