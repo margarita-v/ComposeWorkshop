@@ -14,7 +14,7 @@ fun MainLoading() {
     // banners
     LoadStub(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
             .fillMaxWidth()
             .height(168.dp),
         shapeSize = 20.dp
