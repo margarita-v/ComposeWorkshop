@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.composeworkshop.ui.main.tabs.*
+import com.example.composeworkshop.ui.main.tabs.home.HomeScreen
 import com.example.composeworkshop.ui.theme.Typography
 import com.google.accompanist.insets.navigationBarsHeight
 

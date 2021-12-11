@@ -66,6 +66,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.4.0'
 
     implementation "ru.surfstudio.compose:routing:0.0.2"
+    implementation 'com.valentinilk.shimmer:compose-shimmer:1.0.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
