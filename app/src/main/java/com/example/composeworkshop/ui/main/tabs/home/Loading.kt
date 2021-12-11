@@ -56,7 +56,7 @@ fun MainLoading() {
     // delivery
     LoadStub(
         modifier = Modifier
-            .padding(start = 12.dp, bottom = 12.dp)
+            .padding(start = 12.dp, end = 12.dp)
             .fillMaxWidth()
             .height(96.dp),
         shapeSize = 20.dp

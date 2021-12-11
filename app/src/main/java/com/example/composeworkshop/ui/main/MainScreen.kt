@@ -10,6 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.composeworkshop.ui.main.tabs.*
 import com.example.composeworkshop.ui.main.tabs.home.HomeScreen
+import com.example.composeworkshop.ui.main.tabs.home.HomeViewModel
 import com.example.composeworkshop.ui.theme.Typography
 import com.google.accompanist.insets.navigationBarsHeight
 
@@ -82,7 +84,10 @@ fun Navigation(navController: NavHostController) {
         MainTab.values().forEach { tab ->
             composable(tab.route) {
                 when (tab) {
-                    MainTab.Home -> HomeScreen()
+                    MainTab.Home -> {
+                        val viewModel: HomeViewModel = hiltViewModel()
+                        HomeScreen(viewModel)
+                    }
                     MainTab.Catalog -> CatalogScreen()
                     MainTab.Cart -> CartScreen()
                     MainTab.Shops -> ShopsScreen()
