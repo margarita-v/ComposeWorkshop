@@ -6,9 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import coil.annotation.ExperimentalCoilApi
 import com.example.composeworkshop.LoadState
 import com.example.composeworkshop.domain.ProductsCategoryEntity
 
+@ExperimentalCoilApi
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {

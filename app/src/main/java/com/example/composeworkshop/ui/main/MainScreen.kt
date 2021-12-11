@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.annotation.ExperimentalCoilApi
 import com.example.composeworkshop.ui.main.tabs.*
 import com.example.composeworkshop.ui.main.tabs.home.HomeScreen
 import com.example.composeworkshop.ui.main.tabs.home.HomeViewModel
@@ -78,6 +79,7 @@ fun BottomNavigationBar(navController: NavController) {
     }
 }
 
+@ExperimentalCoilApi
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = MainTab.Home.route) {
@@ -106,6 +108,7 @@ fun Greeting(title: String) {
     }
 }
 
+@ExperimentalCoilApi
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
