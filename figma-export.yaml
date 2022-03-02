@@ -1,0 +1,50 @@
+---
+figma:
+  # Identifier of the file containing light color palette, icons and light images. To obtain a file id, open the file in the browser. The file id will be present in the URL after the word file and before the file name.
+  lightFileId: MRVOEjTRatddzaMN7iYlAe
+  # [optional] Identifier of the file containing dark color palette and dark images.
+  #darkFileId: KfF6DnJTWHGZzC912345
+  # [optional] Figma API request timeout. The default value of this property is 30 (seconds). If you have a lot of resources to export set this value to 60 or more to give Figma API more time to prepare resources for exporting.
+  # timeout: 30
+
+# [optional] Android export parameters
+android:
+  # Relative or absolute path to the `main/res` folder including it. The colors/icons/images will be exported to this folder
+  mainRes: "./app/src/main/res"
+  # [optional] The package name, where the android resource constant `R` is located. Must be provided to enable code generation for Jetpack Compose
+  resourcePackage: "com.example.composeworkshop"
+  # [optional] Relative or absolute path to the code source folder including it. The typography for Jetpack Compose will be exported to this folder
+  mainSrc: "./app/src/main/java"
+  # [optional] Path to the Stencil templates used to generate code
+  templatesPath: "./Templates"
+  
+  # Parameters for exporting colors
+  colors:
+    # [optional] The package to export the Jetpack Compose color code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
+    composePackageName: "com.example.composeworkshop"
+  # Parameters for exporting icons
+  icons:
+    # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
+    output: "figma-import-icons"
+    # [optional] The package to export the Jetpack Compose icon code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
+    composePackageName: "com.example.composeworkshop"
+  # Parameters for exporting images
+  images:
+    # Image file format: svg or png
+    format: webp
+    # Where to place images relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export images` command
+    output: "figma-import-images"
+    # Format options for webp format only
+    # [optional] An array of asset scales that should be downloaded. The valid values are 1 (mdpi), 1.5 (hdpi), 2 (xhdpi), 3 (xxhdpi), 4 (xxxhdpi). The deafault value is [1, 1.5, 2, 3, 4].
+    scales: [1, 2, 3]
+    webpOptions:
+      # Encoding type: lossy or lossless
+      encoding: lossy
+      # Encoding quality in percents. Only for lossy encoding.
+      quality: 90
+  # Parameters for exporting typography
+  typography:
+    # Typography name style: camelCase or snake_case
+    nameStyle: camelCase
+    # [optional] The package to export the Jetpack Compose typography code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
+    composePackageName: "com.example.composeworkshop"
