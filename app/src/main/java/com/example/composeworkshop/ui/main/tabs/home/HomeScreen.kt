@@ -6,13 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeworkshop.LoadState
 import com.example.composeworkshop.domain.ProductsCategoryEntity
 
 @ExperimentalCoilApi
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onCategoryClick: (String) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         val loadState: LoadState by viewModel.loadState.collectAsState()
         val isRefreshing: Boolean by viewModel.isRefreshing.collectAsState()
@@ -28,7 +29,9 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 categories,
                 isRefreshing,
                 alertMessage,
-            ) { viewModel.refresh() }
+                onRefresh = { viewModel.refresh() },
+                onCategoryClick = onCategoryClick
+            )
         }
     }
 }

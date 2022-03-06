@@ -10,17 +10,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
-import com.example.composeworkshop.ui.main.tabs.*
-import com.example.composeworkshop.ui.main.tabs.home.HomeScreen
-import com.example.composeworkshop.ui.main.tabs.home.HomeViewModel
+import com.example.composeworkshop.ui.main.tabs.cartNavGraph
+import com.example.composeworkshop.ui.main.tabs.catalogNavGraph
+import com.example.composeworkshop.ui.main.tabs.home.homeNavGraph
+import com.example.composeworkshop.ui.main.tabs.profileNavGraph
+import com.example.composeworkshop.ui.main.tabs.shopsNavGraph
 import com.example.composeworkshop.ui.theme.Typography
 import com.google.accompanist.insets.navigationBarsHeight
 
@@ -84,17 +84,12 @@ fun BottomNavigationBar(navController: NavController) {
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = MainTab.Home.route) {
         MainTab.values().forEach { tab ->
-            composable(tab.route) {
-                when (tab) {
-                    MainTab.Home -> {
-                        val viewModel: HomeViewModel = hiltViewModel()
-                        HomeScreen(viewModel)
-                    }
-                    MainTab.Catalog -> CatalogScreen()
-                    MainTab.Cart -> CartScreen()
-                    MainTab.Shops -> ShopsScreen()
-                    MainTab.Profile -> ProfileScreen()
-                }
+            when (tab) {
+                MainTab.Home -> homeNavGraph(navController)
+                MainTab.Catalog -> catalogNavGraph(navController)
+                MainTab.Cart -> cartNavGraph(navController)
+                MainTab.Shops -> shopsNavGraph(navController)
+                MainTab.Profile -> profileNavGraph(navController)
             }
         }
     }

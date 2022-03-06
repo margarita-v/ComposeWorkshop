@@ -35,6 +35,7 @@ fun Success(
     isRefreshing: Boolean,
     @StringRes alertMessageResId: Int?,
     onRefresh: () -> Unit,
+    onCategoryClick: (String) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -57,7 +58,7 @@ fun Success(
             )
         }
     ) {
-        CategoriesList(categories = categories)
+        CategoriesList(categories = categories, onCategoryClick = onCategoryClick)
 
         SnackbarHost(
             modifier = Modifier.fillMaxWidth(),
@@ -68,7 +69,10 @@ fun Success(
 
 @ExperimentalCoilApi
 @Composable
-fun CategoriesList(categories: List<ProductsCategoryEntity>) {
+private fun CategoriesList(
+    categories: List<ProductsCategoryEntity>,
+    onCategoryClick: (String) -> Unit
+) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
             LazyRow {
@@ -83,7 +87,8 @@ fun CategoriesList(categories: List<ProductsCategoryEntity>) {
                                     end = 20.dp
                                 )
                                 else -> Modifier.padding(start = 12.dp)
-                            }
+                            },
+                            onCategoryClick = onCategoryClick
                         )
                     }
                 }
@@ -94,7 +99,11 @@ fun CategoriesList(categories: List<ProductsCategoryEntity>) {
 
 @ExperimentalCoilApi
 @Composable
-fun Category(category: ProductsCategoryEntity, modifier: Modifier = Modifier) {
+private fun Category(
+    category: ProductsCategoryEntity,
+    modifier: Modifier = Modifier,
+    onCategoryClick: (String) -> Unit
+) {
     val painter = rememberImagePainter(data = category.icon)
 
     Column(
@@ -107,7 +116,7 @@ fun Category(category: ProductsCategoryEntity, modifier: Modifier = Modifier) {
                 .size(64.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .clickable {
-                    // todo handle category click
+                    onCategoryClick(category.name)
                 },
             painter = painter,
             contentDescription = category.name,
