@@ -8,7 +8,9 @@ import coil.annotation.ExperimentalCoilApi
 import com.example.composeworkshop.ui.main.MainScreen
 import com.example.composeworkshop.ui.theme.ComposeWorkshopTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @ExperimentalCoilApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

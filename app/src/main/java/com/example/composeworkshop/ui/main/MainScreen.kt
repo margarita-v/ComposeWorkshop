@@ -5,10 +5,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -23,6 +26,8 @@ import com.example.composeworkshop.ui.main.tabs.profileNavGraph
 import com.example.composeworkshop.ui.main.tabs.shopsNavGraph
 import com.example.composeworkshop.ui.theme.Typography
 import com.google.accompanist.insets.navigationBarsHeight
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.FlowCollector
 
 @Composable
 fun Greeting(title: String) {
@@ -31,14 +36,41 @@ fun Greeting(title: String) {
     }
 }
 
+@InternalCoroutinesApi
 @ExperimentalCoilApi
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    ScreenLogging(navController = navController)
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) {
         Navigation(navController)
+    }
+}
+
+/** Log current visible screen & lifecycle */
+@InternalCoroutinesApi
+@Composable
+private fun ScreenLogging(navController: NavController) {
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect(
+            object : FlowCollector<NavBackStackEntry> {
+                override suspend fun emit(value: NavBackStackEntry) {
+                    println("Logging Screen / ${value.destination.route}")
+                }
+            }
+        )
+    }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            println("Logging Lifecycle / ${event.name}")
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 }
 
