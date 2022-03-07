@@ -2,8 +2,7 @@ package com.example.composeworkshop.ui.main
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -11,9 +10,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeworkshop.ui.main.tabs.cartNavGraph
@@ -25,15 +25,32 @@ import com.example.composeworkshop.ui.theme.Typography
 import com.google.accompanist.insets.navigationBarsHeight
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun Greeting(title: String) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(textAlign = TextAlign.Center, text = title)
+    }
+}
+
+@ExperimentalCoilApi
+@Composable
+fun MainScreen() {
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = { BottomNavigationBar(navController) }
+    ) {
+        Navigation(navController)
+    }
+}
+
+@Composable
+private fun BottomNavigationBar(navController: NavController) {
     val items = MainTab.values()
     BottomNavigation(
         modifier = Modifier.navigationBarsHeight(56.dp),
         contentColor = MaterialTheme.colors.background,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+        val currentSelectedItem by navController.currentScreenAsState()
         items.forEach { item ->
             BottomNavigationItem(
                 icon = {
@@ -56,22 +73,18 @@ fun BottomNavigationBar(navController: NavController) {
                 selectedContentColor = MaterialTheme.colors.secondary,
                 unselectedContentColor = MaterialTheme.colors.onSecondary,
                 alwaysShowLabel = true,
-                selected = currentRoute == item.route,
+                selected = currentSelectedItem.route == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-                        // Pop up to the start destination of the graph to
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
-                            }
-                        }
                         // Avoid multiple copies of the same destination when
                         // reselecting the same item
                         launchSingleTop = true
                         // Restore state when reselecting a previously selected item
                         restoreState = true
+
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
                     }
                 }
             )
@@ -79,37 +92,46 @@ fun BottomNavigationBar(navController: NavController) {
     }
 }
 
+/**
+ * Adds an [NavController.OnDestinationChangedListener] to this [NavController] and updates the
+ * returned [State] which is updated as the destination changes.
+ */
+@Stable
+@Composable
+private fun NavController.currentScreenAsState(): State<MainTab> {
+    val selectedItem = remember { mutableStateOf(MainTab.Home) }
+
+    DisposableEffect(this) {
+        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            for (value in MainTab.values()) {
+                if (destination.hierarchy.any { it.route == value.route }) {
+                    selectedItem.value = value
+                    break
+                }
+            }
+        }
+        addOnDestinationChangedListener(listener)
+
+        onDispose {
+            removeOnDestinationChangedListener(listener)
+        }
+    }
+
+    return selectedItem
+}
+
 @ExperimentalCoilApi
 @Composable
-fun Navigation(navController: NavHostController) {
+private fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = MainTab.Home.route) {
         MainTab.values().forEach { tab ->
             when (tab) {
-                MainTab.Home -> homeNavGraph(navController)
-                MainTab.Catalog -> catalogNavGraph(navController)
-                MainTab.Cart -> cartNavGraph(navController)
-                MainTab.Shops -> shopsNavGraph(navController)
-                MainTab.Profile -> profileNavGraph(navController)
+                MainTab.Home -> homeNavGraph(navController, tab)
+                MainTab.Catalog -> catalogNavGraph(navController, tab)
+                MainTab.Cart -> cartNavGraph(navController, tab)
+                MainTab.Shops -> shopsNavGraph(navController, tab)
+                MainTab.Profile -> profileNavGraph(navController, tab)
             }
         }
-    }
-}
-
-
-@Composable
-fun Greeting(title: String) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(textAlign = TextAlign.Center, text = title)
-    }
-}
-
-@ExperimentalCoilApi
-@Composable
-fun MainScreen() {
-    val navController = rememberNavController()
-    Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
-    ) {
-        Navigation(navController)
     }
 }
