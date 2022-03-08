@@ -5,8 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import coil.annotation.ExperimentalCoilApi
+import com.example.composeworkshop.ui.main.LeafNav
 import com.example.composeworkshop.ui.main.MainTab
-import com.example.composeworkshop.ui.main.screens.CategoryNav
 
 @ExperimentalCoilApi
 fun NavGraphBuilder.homeNavGraph(navController: NavController, tab: MainTab) {
@@ -16,13 +16,18 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController, tab: MainTab) {
     ) {
         composable(tab.name) {
             HomeScreen(
-                onCategoryClick = {
-                    navController.navigate(CategoryNav.CategoryNavScreen.getRoute(it))
+                onCategoryClick = { categoryName ->
+                    navController.navigate(
+                        LeafNav.CategoryNavScreen.routeWithRootAndArguments(
+                            root = tab.route,
+                            argument0 = categoryName
+                        )
+                    )
                 }
             )
         }
-        with(CategoryNav.CategoryNavScreen) {
-            composable(routeWithArgument) { backStackEntry ->
+        with(LeafNav.CategoryNavScreen) {
+            composable(configureRoute(root = tab.route)) { backStackEntry ->
                 backStackEntry.arguments?.let { bundle ->
                     com.example.composeworkshop.ui.main.screens.Category(
                         name = bundle.getString(argument0)!!

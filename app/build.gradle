@@ -78,7 +78,7 @@ dependencies {
     implementation "io.coil-kt:coil-compose:1.3.2"
 
     // other
-    implementation "ru.surfstudio.compose:routing:0.0.2"
+    implementation "ru.surfstudio.compose:routing:0.0.14"
     implementation 'com.valentinilk.shimmer:compose-shimmer:1.0.2'
 
     testImplementation 'junit:junit:4.13.2'
