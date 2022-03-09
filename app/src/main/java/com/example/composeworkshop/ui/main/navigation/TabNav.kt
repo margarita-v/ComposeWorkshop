@@ -1,9 +1,9 @@
-package com.example.composeworkshop.ui.main
+package com.example.composeworkshop.ui.main.navigation
 
 import ru.surfstudio.compose.routing.NavigationRoute
 
 /** Root for each tab of nested graph */
-object MainNav {
+object TabNav {
     val HomeNavScreen = object : NavigationRoute {
         override val route: String = "HomeScreen"
     }

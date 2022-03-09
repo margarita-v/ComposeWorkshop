@@ -19,6 +19,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
+import com.example.composeworkshop.ui.main.navigation.ScreenNav
+import com.example.composeworkshop.ui.main.screens.navigateToCategory
 import com.example.composeworkshop.ui.main.tabs.cartNavGraph
 import com.example.composeworkshop.ui.main.tabs.catalogNavGraph
 import com.example.composeworkshop.ui.main.tabs.home.homeNavGraph
@@ -41,9 +43,14 @@ fun Greeting(title: String) {
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    val mainState = rememberMainState(navController = navController)
     ScreenLogging(navController = navController)
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = {
+            if (mainState.shouldShowBottomBar) {
+                BottomNavigationBar(navController)
+            }
+        }
     ) {
         Navigation(navController)
     }
@@ -105,7 +112,7 @@ private fun BottomNavigationBar(navController: NavController) {
                 selectedContentColor = MaterialTheme.colors.secondary,
                 unselectedContentColor = MaterialTheme.colors.onSecondary,
                 alwaysShowLabel = true,
-                selected = currentSelectedItem.route == item.route,
+                selected = currentSelectedItem.route.startsWith(item.route),
                 onClick = {
                     navController.navigate(item.route) {
                         // Avoid multiple copies of the same destination when
@@ -136,7 +143,7 @@ private fun NavController.currentScreenAsState(): State<MainTab> {
     DisposableEffect(this) {
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
             for (value in MainTab.values()) {
-                if (destination.hierarchy.any { it.route == value.route }) {
+                if (destination.hierarchy.any { it.route.orEmpty().startsWith(value.route) }) {
                     selectedItem.value = value
                     break
                 }
@@ -155,7 +162,7 @@ private fun NavController.currentScreenAsState(): State<MainTab> {
 @ExperimentalCoilApi
 @Composable
 private fun Navigation(navController: NavHostController) {
-    NavHost(navController, startDestination = MainTab.Home.route) {
+    NavHost(navController, startDestination = MainTab.Home.name) {
         MainTab.values().forEach { tab ->
             when (tab) {
                 MainTab.Home -> homeNavGraph(navController, tab)
@@ -164,6 +171,12 @@ private fun Navigation(navController: NavHostController) {
                 MainTab.Shops -> shopsNavGraph(navController, tab)
                 MainTab.Profile -> profileNavGraph(navController, tab)
             }
+        }
+        with(ScreenNav.FullCategoryNavScreen) {
+            navigateToCategory(
+                route = route,
+                argument = argument0
+            )
         }
     }
 }

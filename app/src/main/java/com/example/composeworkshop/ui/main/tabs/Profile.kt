@@ -10,10 +10,10 @@ import com.example.composeworkshop.ui.main.MainTab
 
 fun NavGraphBuilder.profileNavGraph(navController: NavController, tab: MainTab) {
     navigation(
-        route = tab.route,
-        startDestination = tab.name,
+        route = tab.name,
+        startDestination = tab.route,
     ) {
-        composable(tab.name) {
+        composable(tab.route) {
             ProfileScreen()
         }
     }

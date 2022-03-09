@@ -1,4 +1,4 @@
-package com.example.composeworkshop.ui.main
+package com.example.composeworkshop.ui.main.navigation
 
 import ru.surfstudio.compose.routing.NavigationRouteArgument1
 

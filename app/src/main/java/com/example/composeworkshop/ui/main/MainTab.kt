@@ -3,6 +3,7 @@ package com.example.composeworkshop.ui.main
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.composeworkshop.R
+import com.example.composeworkshop.ui.main.navigation.TabNav
 
 enum class MainTab(
     val route: String,
@@ -11,31 +12,31 @@ enum class MainTab(
 ) {
 
     Home(
-        MainNav.HomeNavScreen.route,
+        TabNav.HomeNavScreen.route,
         R.drawable.ic_home_tab,
         R.string.bottom_bar_home
     ),
 
     Catalog(
-        MainNav.CatalogNavScreen.route,
+        TabNav.CatalogNavScreen.route,
         R.drawable.ic_catalog_tab,
         R.string.bottom_bar_catalog
     ),
 
     Cart(
-        MainNav.CartNavScreen.route,
+        TabNav.CartNavScreen.route,
         R.drawable.ic_shopping_cart_tab,
         R.string.bottom_bar_shopping_cart
     ),
 
     Shops(
-        MainNav.ShopsNavScreen.route,
+        TabNav.ShopsNavScreen.route,
         R.drawable.ic_shops_tab,
         R.string.bottom_bar_shops
     ),
 
     Profile(
-        MainNav.ProfileNavScreen.route,
+        TabNav.ProfileNavScreen.route,
         R.drawable.ic_profile_tab,
         R.string.bottom_bar_profile
     );
