@@ -64,7 +64,7 @@ private fun ScreenLogging(navController: NavController) {
         navController.currentBackStackEntryFlow.collect(
             object : FlowCollector<NavBackStackEntry> {
                 override suspend fun emit(value: NavBackStackEntry) {
-                    println("Logging Screen / ${value.destination.route}")
+                    println("Logging Screen / ${value.destination.route} ${value.arguments}")
                 }
             }
         )

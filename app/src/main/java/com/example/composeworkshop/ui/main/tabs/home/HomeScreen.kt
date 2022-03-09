@@ -13,7 +13,11 @@ import com.example.composeworkshop.domain.ProductsCategoryEntity
 
 @ExperimentalCoilApi
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onCategoryClick: (String) -> Unit) {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    onCategoryClick: (String) -> Unit,
+    openNextScreen: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         val loadState: LoadState by viewModel.loadState.collectAsState()
         val isRefreshing: Boolean by viewModel.isRefreshing.collectAsState()
@@ -30,7 +34,8 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onCategoryClick: (Str
                 isRefreshing,
                 alertMessage,
                 onRefresh = { viewModel.refresh() },
-                onCategoryClick = onCategoryClick
+                onCategoryClick = onCategoryClick,
+                openNextScreen = openNextScreen
             )
         }
     }

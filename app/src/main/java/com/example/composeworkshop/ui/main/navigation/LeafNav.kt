@@ -12,4 +12,9 @@ object LeafNav {
         override val argument0: String = "name"
         override val route: String = "CategoryNavScreen/{$argument0}"
     }
+
+    object StackNavScreen : NavigationRouteArgument1 {
+        override val argument0: String = "title"
+        override val route: String = "StackNavScreen/{$argument0}"
+    }
 }

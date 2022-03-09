@@ -33,7 +33,7 @@ fun NavGraphBuilder.catalogNavGraph(navController: NavController, tab: MainTab) 
 fun CatalogScreen(openCategoryClicked: () -> Unit) {
     Column {
         Button(onClick = { openCategoryClicked() }) {
-            Text(textAlign = TextAlign.Center, text = "Open category")
+            Text(textAlign = TextAlign.Center, text = "Open full screen category")
         }
     }
 }

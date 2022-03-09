@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -35,7 +32,8 @@ fun Success(
     isRefreshing: Boolean,
     @StringRes alertMessageResId: Int?,
     onRefresh: () -> Unit,
-    onCategoryClick: (String) -> Unit
+    onCategoryClick: (String) -> Unit,
+    openNextScreen: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -58,7 +56,11 @@ fun Success(
             )
         }
     ) {
-        CategoriesList(categories = categories, onCategoryClick = onCategoryClick)
+        CategoriesList(
+            categories = categories,
+            onCategoryClick = onCategoryClick,
+            openNextScreen = openNextScreen
+        )
 
         SnackbarHost(
             modifier = Modifier.fillMaxWidth(),
@@ -71,7 +73,8 @@ fun Success(
 @Composable
 private fun CategoriesList(
     categories: List<ProductsCategoryEntity>,
-    onCategoryClick: (String) -> Unit
+    onCategoryClick: (String) -> Unit,
+    openNextScreen: () -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
@@ -92,6 +95,9 @@ private fun CategoriesList(
                         )
                     }
                 }
+            }
+            Button(onClick = { openNextScreen() }) {
+                Text(text = "Open next screen")
             }
         }
     }
